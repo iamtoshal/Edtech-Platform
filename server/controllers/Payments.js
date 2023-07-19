@@ -20,7 +20,7 @@ exports.capturePayment = async (req, res) => {
         })
     }
 
-    //valld courseID
+    //valld courseDetails
     let course;
     try {
         //vali courseDetail
@@ -73,10 +73,10 @@ exports.capturePayment = async (req, res) => {
             success: true,
             courseName: course.courseName,
             courseDescription: course.courseDescription,
-            currency,
-            thumbnail,
-            price,
-            amount,
+            orderId: paymentResponse.id,
+            thumbnail: course.thumbnail,
+            currency: paymentResponse.currency,
+            amount: paymentResponse.amount,
         })
 
     } catch (err) {
@@ -126,13 +126,14 @@ exports.verifySignature = async (req, res) => {
             }
             console.log(enrolledCourse)
 
+            //find the student and add the course to their enrolled courses list
             const enrolledStudent = await User.findOneAndUpdate(
                 { _id: userid },
                 { $push: { courses: course_id } },
                 { new: true },
             )
-
             console.log(enrolledStudent);
+
 
             //sending confirmation mail
             const emailResponse = await mailSender(
@@ -150,12 +151,18 @@ exports.verifySignature = async (req, res) => {
         } catch (err) {
             return res.status(400).json({
                 success: false,
-                message: "",
+                message: err.message,
             })
 
         }
 
 
+    }
+    else {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid request",
+        })
     }
 
 
