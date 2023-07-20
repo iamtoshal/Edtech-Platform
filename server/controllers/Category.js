@@ -1,4 +1,4 @@
-const Tag = require("../models/tags");
+const Category = require("../models/Category");
 
 //create Tag handler functions
 
@@ -52,6 +52,39 @@ exports.showAllCategory = async (req, res) => {
         })
     }
     catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        })
+    }
+}
+
+//categoryPageDetails 
+
+
+exports.categoryPageDetails = async (req, res) => {
+    try {
+        //get categoryId
+        const { categoryId } = req.body;
+
+        //get category for specified categoryID
+        const selectedCategory = await Category.findById(categoryId).populate("courses").exec();
+
+        //valicdation
+        if (!selectedCategory) {
+            return res.status(404).json({
+                success: false,
+                message: "Data not found",
+            })
+        }
+
+        //get course for different categories
+
+        // get top selling courses 
+
+        //return response
+
+    } catch (err) {
         return res.status(500).json({
             success: false,
             message: err.message,
