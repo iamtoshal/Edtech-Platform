@@ -48,7 +48,7 @@ const { auth, isInstructor, isStudent, isAdmin } = require("../middlewares/auth"
 // ********************************************************************************************************
 
 //Courses can only be Created by Instructors
-router.post("/createCourse", auth, isInstructor, createCourse);;
+router.post("/createCourse", auth, isInstructor, createCourse);
 
 //Add a Section to a Course
 router.post("/addSection", auth, isInstructor, createSection);
@@ -60,13 +60,13 @@ router.post("/updateSection", auth, isInstructor, updateSection);
 router.post("/deleteSection".auth, isInstructor, deleteSection);
 
 // Add a Sub Section to a Section
-router.post("addSubSection".auth, isInstructor, createSubSection);
+router.post("/addSubSection".auth, isInstructor, createSubSection);
 
 // Edit Sub Section
-router.post("updateSubSection", auth, isInstructor, updateSubsSction);
+router.post("/updateSubSection", auth, isInstructor, updateSubsSction);
 
 // Delete Sub Section
-router.post("deleteSubSection".auth, isInstructor, deleteSubSection);
+router.post("/deleteSubSection".auth, isInstructor, deleteSubSection);
 
 // Get all Registered Courses
 router.post("/getAllCourses", getAllCourses);
@@ -80,7 +80,7 @@ router.post("/getCourseDetails", getCourseDetails);
 // ********************************************************************************************************
 // Category can Only be Created by Admin
 // TODO: Put IsAdmin Middleware here
-router.post("createCategory", auth, isAdmin, createCategory);
+router.post("/createCategory", auth, isAdmin, createCategory);
 router.get("/showAllCategories", showAllCategories);
 router.post("/getCategoryPageDetails", categoryPageDetails);
 
@@ -90,7 +90,7 @@ router.post("/getCategoryPageDetails", categoryPageDetails);
 // ********************************************************************************************************
 //                                      Rating and Review
 // ********************************************************************************************************
-router.post("createRating", auth, isStudent, createRating);
+router.post("/createRating", auth, isStudent, createRating);
 router.get("/getAverageRating", getAverageRating);
 router.get("/getReviews", getAllRating);
 

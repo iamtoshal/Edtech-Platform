@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.schema({
+const userSchema = new mongoose.Schema({
     // Define the name field with type String, required, and trimmed
     firstName: {
         type: String,
