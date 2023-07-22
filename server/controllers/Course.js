@@ -1,6 +1,5 @@
 const Category = require('../models/Category');
 const Course = require('../models/Course');
-const Tag = require('../models/tags');
 const User = require('../models/User');
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
@@ -50,7 +49,7 @@ exports.createCourse = async (req, res) => {
         if (!categoryDetails) {
             return res.status(404).json({
                 success: false,
-                message: "Tag Details not found",
+                message: "Category Details not found",
             })
         }
 
@@ -113,7 +112,7 @@ exports.createCourse = async (req, res) => {
 
 
 //getAllCourses handler function
-exports.showAllCourses = async (req, res) => {
+exports.getAllCourses = async (req, res) => {
     try {
         const allCourses = await Course.find({}, {
             courseName: true,
@@ -161,7 +160,6 @@ exports.getCourseDetails = async (req, res) => {
             })
             .populate("category")
             //.populate("ratingAndreviews")
-            .populate("ratingAndReviews")
             .populate({
                 path: "courseContent",
                 populate: {

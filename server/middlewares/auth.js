@@ -36,7 +36,7 @@ exports.auth = async (req, res, next) => {
 
 
     } catch (error) {
-        return res.staus(401).json({
+        return res.status(401).json({
             success: true,
             message: "Something went wrong while validating token"
         })

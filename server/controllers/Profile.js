@@ -50,7 +50,7 @@ exports.updateProfile = async (req, res) => {
 
 //Delete Account
 
-exports.deleteAccount = async (res, res) => {
+exports.deleteAccount = async (req, res) => {
     try {
 
         //TODO : Explore -> How can we schedule this deletion operation -> Cron Jobs

@@ -13,7 +13,7 @@ const {
 
 // Categories Controllers Import
 const {
-    showAllCategories,
+    showAllCategory,
     createCategory,
     categoryPageDetails,
 } = require("../controllers/Category");
@@ -28,7 +28,7 @@ const {
 //Sub-Sections controllers Import
 const {
     createSubSection,
-    updateSubsSction,
+    updateSubSection,
     deleteSubSection
 } = require("../controllers/Subsection");
 
@@ -57,16 +57,16 @@ router.post("/addSection", auth, isInstructor, createSection);
 router.post("/updateSection", auth, isInstructor, updateSection);
 
 // Delete a Section
-router.post("/deleteSection".auth, isInstructor, deleteSection);
+router.post("/deleteSection", auth, isInstructor, deleteSection);
 
 // Add a Sub Section to a Section
-router.post("/addSubSection".auth, isInstructor, createSubSection);
+router.post("/addSubSection", auth, isInstructor, createSubSection);
 
 // Edit Sub Section
-router.post("/updateSubSection", auth, isInstructor, updateSubsSction);
+router.post("/updateSubSection", auth, isInstructor, updateSubSection);
 
 // Delete Sub Section
-router.post("/deleteSubSection".auth, isInstructor, deleteSubSection);
+router.post("/deleteSubSection", auth, isInstructor, deleteSubSection);
 
 // Get all Registered Courses
 router.post("/getAllCourses", getAllCourses);
@@ -81,7 +81,7 @@ router.post("/getCourseDetails", getCourseDetails);
 // Category can Only be Created by Admin
 // TODO: Put IsAdmin Middleware here
 router.post("/createCategory", auth, isAdmin, createCategory);
-router.get("/showAllCategories", showAllCategories);
+router.get("/showAllCategories", showAllCategory);
 router.post("/getCategoryPageDetails", categoryPageDetails);
 
 

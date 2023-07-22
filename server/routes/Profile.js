@@ -19,3 +19,5 @@ router.get("/getUserDetails", auth, getAllUserDetails);
 // Get Enrolled Courses
 router.get("/getEnrolledCourses", auth, getEnrolledCourses);
 router.put("/updateDisplayPicture", auth, updateDisplayPicture);
+
+module.exports = router;

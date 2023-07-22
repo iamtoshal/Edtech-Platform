@@ -12,7 +12,6 @@ const cors = require("cors");
 const { cloudinaryConnect } = require('./config/cloudinary')
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
-const { default: paymentLink } = require('razorpay/dist/types/paymentLink');
 
 dotenv.config();
 const PORT = process.env.PORT || 4000;
@@ -23,7 +22,7 @@ database.connect();
 
 //middlwares
 app.use(express.json());
-app.use(cookieParser);
+app.use(cookieParser());
 app.use(
     cors({
         origin: 'http://localhost:3000',
@@ -59,5 +58,5 @@ app.get("/", (req, res) => {
 
 
 app.listen(PORT, () => {
-    console.log("App is running at PORT : ${PORT}");
+    console.log(`App is running at PORT : ${PORT}`);
 })

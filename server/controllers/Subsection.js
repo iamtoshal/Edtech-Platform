@@ -4,7 +4,7 @@ const uploadImageToCloudinary = require('../utils/imageUploader');
 
 //create Subsection
 
-exports.createSubsection = async (req, res) => {
+exports.createSubSection = async (req, res) => {
     try {
         //fetch data from req body
         const { sectionId, title, timeDuration, description } = req.body;
