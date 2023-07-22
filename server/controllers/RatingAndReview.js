@@ -1,5 +1,6 @@
 const RatingAndReview = require('../models/RatingAndReview');
 const Course = require('../models/Course');
+const mongoose = require("mongoose");
 
 //createRating
 exports.createRating = async (req, res) => {
@@ -99,7 +100,7 @@ exports.getAverageRating = async (req, res) => {
             return res.status(200).json({
                 success: true,
                 averageRating: result[0].averageRating,
-                message: "Average rating created",
+                message: "Average rating calculated",
             })
         }
 
@@ -119,8 +120,6 @@ exports.getAverageRating = async (req, res) => {
 
     }
 }
-
-
 
 
 

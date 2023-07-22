@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userName = new mongoose.schema({
+const CourseProgress = new mongoose.schema({
     courseID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Course",
@@ -12,6 +12,6 @@ const userName = new mongoose.schema({
         }
     ],
 
-})
+});
 
-module.exports = mongoose.model("CourseProgress", userSchema)
+module.exports = mongoose.model("CourseProgress", CourseProgress);

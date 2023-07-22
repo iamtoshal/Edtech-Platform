@@ -15,7 +15,7 @@ exports.auth = async (req, res, next) => {
             return res.status(401).json({
                 succes: false,
                 message: "Token is missing",
-            })
+            });
         }
 
         //verify the token
@@ -92,6 +92,7 @@ exports.isInstructor = async (req, res, next) => {
 //isAdmin
 exports.isAdmin = async (req, res, next) => {
     try {
+        console.log("Printing AccountType ", req.user.accountType);
         if (req.user.accountType !== 'Admin') {
             return res.status(401).json({
                 success: false,

@@ -24,10 +24,14 @@ exports.createSection = async (req, res) => {
                 $push: {
                     courseContent: newSection._id,
                 },
-                //TODO : Find a way to display section and sub-section using populate at same time
             },
             { new: true }
-        );
+        ).populate({
+            path: "courseContent",
+            populate: {
+                path: "subSection",
+            }
+        }).exec();
 
         //return response
         return res.status(200).json({
@@ -71,6 +75,7 @@ exports.updateSection = async (req, res) => {
 
 
     } catch (err) {
+        console.error("Error updating section:", error);
         return res.status(500).json({
             success: false,
             message: "Unable to Update section,please try again",
@@ -84,7 +89,8 @@ exports.deleteSection = async (req, res) => {
     try {
         //data fetch
         //get ID - assuming  that we are sending ID in params
-        const { sectionId } = req.params;
+        //TODO: test with req.params
+        const { sectionId } = req.body;
 
         //TODO :do we need to delete entry from the schema
         //use findByIdAndDelete

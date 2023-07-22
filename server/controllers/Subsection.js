@@ -14,22 +14,23 @@ exports.createSubsection = async (req, res) => {
 
         //validation
         if (!sectionId || !title || !timeDuration || !description || !video) {
-            return res.status(400).json({
+            return res.status(404).json({
                 success: false,
                 message: "All fields are required",
             })
         }
+        console.log(video);
 
         //upload video to cloudinary
         const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME);
-
+        console.log(uploadDetails);
 
         //create a sub section
         const SubSectionDetails = await SubSection.create({
             title: title,
-            timeDuration: timeDuration,
+            timeDuration: `${uploadDetails.duration}`,
             description: description,
-            video: uploadDetails.secure_url,
+            videoUrl: uploadDetails.secure_url,
         })
 
 
@@ -42,15 +43,15 @@ exports.createSubsection = async (req, res) => {
                 },
             },
             { new: true }
-        )
-        //TODO : Log updated section section after updating subsection with objectId
+        ).populate("subSection");
+        //TODO : Log updated section after updating subsection with objectId
 
 
         //return response
         return res.status(200).json({
             success: true,
             message: "Subsection created successfully",
-            updatedSection,
+            data: updatedSection,
         })
 
 
@@ -65,65 +66,143 @@ exports.createSubsection = async (req, res) => {
 }
 
 
-//TODO : update sunsection
+// //update Subsection
+// exports.updateSubSection = async (req, res) => {
+//     try {
+//         //data fetch
+//         const { subSectionId, title, timeDuration, description, video } = req.body;
+
+//         //validation
+//         if (!subSectionId || !title || !timeDuration || !description || !video) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "All fields are required",
+//             })
+//         }
+
+//         //updating subsection
+//         const subSection = await SubSection.findByIdAndUpdate({ subSectionId }, {
+//             title, timeDuration, description, video
+//         },
+//             { new: true },
+//         )
+
+//         //return response
+//         return res.status(200).json({
+//             success: true,
+//             message: "SubSection updated successfully",
+//             subSection,
+//         })
+
+
+//     }
+//     catch (err) {
+//         return res.status(500).json({
+//             success: false,
+//             message: "Internal Server Error During Update Subsection"
+//         })
+//     }
+// }
+
+
+// // Delete subsection
+// exports.deleteSubSection = async (req, res) => {
+//     try {
+//         // //data fetch
+//         const { subSectionId } = req.body;
+
+//         await SubSection.findByIdAndUDelete(subSectionId);
+
+//         //return res
+//         return res.status(200).json({
+//             success: true,
+//             message: "SubSection deleted Successfully"
+
+//         })
+//     }
+//     catch (err) {
+//         return res.status(500).json({
+//             success: false,
+//             message: "Unable to Delete SubSection,please try again",
+//             error: err.message
+//         })
+//     }
+// }
+
+
+
 exports.updateSubSection = async (req, res) => {
     try {
-        //data fetch
-        const { subSectionId, title, timeDuration, description, video } = req.body;
+        const { sectionId, title, description } = req.body
+        const subSection = await SubSection.findById(sectionId)
 
-        //validation
-        if (!subSectionId || !title || !timeDuration || !description || !video) {
-            return res.status(400).json({
+        if (!subSection) {
+            return res.status(404).json({
                 success: false,
-                message: "All fields are required",
+                message: "SubSection not found",
             })
         }
 
-        //updating subsection
-        const subSection = await SubSection.findByIdAndUpdate({ subSectionId }, {
-            title, timeDuration, description, video
-        },
-            { new: true },
-        )
+        if (title !== undefined) {
+            subSection.title = title
+        }
 
-        //return response
-        return res.status(200).json({
+        if (description !== undefined) {
+            subSection.description = description
+        }
+        if (req.files && req.files.video !== undefined) {
+            const video = req.files.video
+            const uploadDetails = await uploadImageToCloudinary(
+                video,
+                process.env.FOLDER_NAME
+            )
+            subSection.videoUrl = uploadDetails.secure_url
+            subSection.timeDuration = `${uploadDetails.duration}`
+        }
+
+        await subSection.save()
+
+        return res.json({
             success: true,
-            message: "SubSection updated successfully",
-            subSection,
+            message: "Section updated successfully",
         })
-
-
-    }
-    catch (err) {
+    } catch (error) {
+        console.error(error)
         return res.status(500).json({
             success: false,
-            message: "Internal Server Error During Update Subsection"
+            message: "An error occurred while updating the section",
         })
     }
 }
 
-
-//TODO : Delete subsection
 exports.deleteSubSection = async (req, res) => {
     try {
-        // //data fetch
-        const { subSectionId, title, timeDuration, description, video } = req.body;
+        const { subSectionId, sectionId } = req.body
+        await Section.findByIdAndUpdate(
+            { _id: sectionId },
+            {
+                $pull: {
+                    subSection: subSectionId,
+                },
+            }
+        )
+        const subSection = await SubSection.findByIdAndDelete({ _id: subSectionId })
 
-        await SubSection.findByIdAndUDelete(subSectionId);
+        if (!subSection) {
+            return res
+                .status(404)
+                .json({ success: false, message: "SubSection not found" })
+        }
 
-        //return res
-        return res.status(200).json({
+        return res.json({
             success: true,
-            message: "SubSection deleted Successfully"
-
+            message: "SubSection deleted successfully",
         })
-    }
-    catch (err) {
+    } catch (error) {
+        console.error(error)
         return res.status(500).json({
             success: false,
-            message: "Unable to Delete SubSection,please try again",
-            error: err.message
+            message: "An error occurred while deleting the SubSection",
         })
     }
 }

@@ -3,6 +3,7 @@ const Course = require("../models/Course");
 const User = require('../models/User');
 const mailSender = require('../utils/mailSender');
 const { courseEnrollmentEmail } = require('../mail/templates/courseEnrollmentEmail');
+const { default: mongoose } = require("mongoose");
 
 
 //capture the payment and initiate the Razorpay order
@@ -106,15 +107,15 @@ exports.verifySignature = async (req, res) => {
     if (signature === digest) {
         console.log("Payment is authorized");
 
-        const { course_id, userid } = req.body.payload.payment.entity.notes;
+        const { courseId, userId } = req.body.payload.payment.entity.notes;
 
         try {
             //fullfill the action
 
             //find the course and rnoll the student 
             const enrolledCourse = await Course.findOneAndUpdate(
-                { _id: course_id },
-                { $push: { studentEnrolled: userid } },
+                { _id: courseId },
+                { $push: { studentEnrolled: userId } },
                 { new: true },
             )
 
@@ -128,8 +129,8 @@ exports.verifySignature = async (req, res) => {
 
             //find the student and add the course to their enrolled courses list
             const enrolledStudent = await User.findOneAndUpdate(
-                { _id: userid },
-                { $push: { courses: course_id } },
+                { _id: userId },
+                { $push: { courses: courseId } },
                 { new: true },
             )
             console.log(enrolledStudent);

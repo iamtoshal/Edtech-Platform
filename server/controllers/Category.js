@@ -8,7 +8,7 @@ exports.createCategory = async (req, res) => {
         const { name, description } = req.body;
 
         //validating tags name and description
-        if (!name || !description) {
+        if (!name) {
             return res.status(400).json({
                 success: false,
                 message: 'All fields are required',
@@ -17,16 +17,16 @@ exports.createCategory = async (req, res) => {
         }
 
         //create entry in db
-        const tagDetails = await Tag.create({
+        const categoryDetails = await Category.create({
             name: name,
             description: description,
         });
-        console.log("tag details : ", tagDetails)
+        console.log("tag details : ", categoryDetails)
 
         //return response
         return res.status(200).json({
             message: true,
-            message: 'Tag Created Successfully',
+            message: 'Categories Created Successfully',
         })
     }
     catch (err) {
@@ -43,12 +43,12 @@ exports.showAllCategory = async (req, res) => {
     try {
         //here we are searching on the basis of any criteria,just get all
         //entries and make sure that entries contains name and decsription
-        const allTags = await Tag.find({}, { name: true, description: true });
+        const allCategory = await Tag.find({}, { name: true, description: true });
 
         res.status(200).json({
             success: true,
             message: 'All tags returned successfully',
-            allTags,
+            data: allCategory,
         })
     }
     catch (err) {
@@ -70,7 +70,7 @@ exports.categoryPageDetails = async (req, res) => {
         //get category for specified categoryID
         const selectedCategory = await Category.findById(categoryId).populate("courses").exec();
 
-        //valicdation
+        //validation
         if (!selectedCategory) {
             return res.status(404).json({
                 success: false,
@@ -79,10 +79,22 @@ exports.categoryPageDetails = async (req, res) => {
         }
 
         //get course for different categories
+        const differentCategories = await Category.find({
+            _id: { $ne: categoryId },
+        }).populate('courses').exec();
 
         // get top selling courses 
+        //TODO: top selling course
+
 
         //return response
+        return res.status(200).json({
+            success: true,
+            data: {
+                selectedCategory,
+                differentCategories,
+            },
+        })
 
     } catch (err) {
         return res.status(500).json({

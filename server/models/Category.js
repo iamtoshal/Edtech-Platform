@@ -8,7 +8,7 @@ const categorySchema = new mongoose.Schema({
     description: {
         type: String,
     },
-    course: [
+    courses: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Course",
@@ -16,5 +16,5 @@ const categorySchema = new mongoose.Schema({
     ]
 });
 
-module.exports = mongoose.model("Tag", categorySchema);
+module.exports = mongoose.model("Category", categorySchema);
 
