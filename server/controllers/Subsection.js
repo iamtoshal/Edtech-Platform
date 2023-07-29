@@ -1,19 +1,19 @@
 const SubSection = require('../models/subSection');
 const Section = require('../models/Section');
-const uploadImageToCloudinary = require('../utils/imageUploader');
+const { uploadImageToCloudinary } = require('../utils/imageUploader');
 
 //create Subsection
 
 exports.createSubSection = async (req, res) => {
     try {
         //fetch data from req body
-        const { sectionId, title, timeDuration, description } = req.body;
+        const { sectionId, title, description } = req.body;
 
         //extract file/video
-        const video = req.files.videoFile;
+        const video = req.files.video;
 
         //validation
-        if (!sectionId || !title || !timeDuration || !description || !video) {
+        if (!sectionId || !title || !description || !video) {
             return res.status(404).json({
                 success: false,
                 message: "All fields are required",
@@ -22,8 +22,11 @@ exports.createSubSection = async (req, res) => {
         console.log(video);
 
         //upload video to cloudinary
-        const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME);
-        console.log(uploadDetails);
+        const uploadDetails = await uploadImageToCloudinary(
+            video,
+            process.env.FOLDER_NAME
+        )
+        console.log(uploadDetails)
 
         //create a sub section
         const SubSectionDetails = await SubSection.create({
@@ -57,7 +60,7 @@ exports.createSubSection = async (req, res) => {
 
     } catch (err) {
         return res.status(500).json({
-            success: true,
+            success: false,
             message: "Internal Server error during creating subsection",
             error: err.message,
         })

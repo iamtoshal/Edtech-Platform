@@ -11,7 +11,14 @@ exports.createCourse = async (req, res) => {
 
         //fetch data
         let {
-            courseName, courseDescription, whatYouWillLearn, price, tag, category, status, instructions
+            courseName,
+            courseDescription,
+            whatYouWillLearn,
+            price,
+            tag,
+            category,
+            status,
+            instructions,
         } = req.body;
 
         //get thumbnail
@@ -60,7 +67,7 @@ exports.createCourse = async (req, res) => {
         const newCourse = await Course.create({
             courseName,
             courseDescription,
-            Instrcutor: instructorDetails._id,
+            instructor: instructorDetails._id,
             whatYouWillLearn: whatYouWillLearn,
             price,
             tag: tag,
@@ -70,16 +77,19 @@ exports.createCourse = async (req, res) => {
             instructions: instructions,
         });
 
+
         //add the new course to the user schema of Instructor
         await User.findByIdAndUpdate(
-            { _id: instructorDetails._id },
+            {
+                _id: instructorDetails._id,
+            },
             {
                 $push: {
                     courses: newCourse._id,
-                }
+                },
             },
-            { new: true },
-        )
+            { new: true }
+        );
 
         await Category.findByIdAndUpdate(
             { _id: category },

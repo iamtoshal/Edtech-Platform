@@ -21,7 +21,7 @@ exports.createCategory = async (req, res) => {
             name: name,
             description: description,
         });
-        console.log("tag details : ", categoryDetails)
+        console.log("category details : ", categoryDetails)
 
         //return response
         return res.status(200).json({
@@ -43,11 +43,11 @@ exports.showAllCategory = async (req, res) => {
     try {
         //here we are searching on the basis of any criteria,just get all
         //entries and make sure that entries contains name and decsription
-        const allCategory = await Tag.find({}, { name: true, description: true });
+        const allCategory = await Category.find({}, { name: true, description: true });
 
         res.status(200).json({
             success: true,
-            message: 'All tags returned successfully',
+            message: 'All categories returned successfully',
             data: allCategory,
         })
     }

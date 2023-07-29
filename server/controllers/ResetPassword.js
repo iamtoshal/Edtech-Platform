@@ -106,7 +106,7 @@ exports.resetPassword = async (req, res) => {
 
 
         //return response
-        return res.ststua(200).json({
+        return res.status(200).json({
             success: true,
             message: "Password reset successful",
         })

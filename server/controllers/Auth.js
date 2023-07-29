@@ -132,7 +132,7 @@ exports.signUp = async (req, res) => {
                 success: false,
                 message: "OTP not found",
             })
-        } else if (otp !== recentOtp.otp) {
+        } else if (otp !== recentOtp[0].otp) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid OTP",
@@ -155,7 +155,7 @@ exports.signUp = async (req, res) => {
             contactNumber: null
         })
 
-        const user = await User.Create({
+        const user = await User.create({
             firstName,
             lastName,
             email,
